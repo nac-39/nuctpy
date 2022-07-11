@@ -1,7 +1,7 @@
 import requests
 from html.parser import HTMLParser
 import time
-from totp import get_totp_token
+from .totp import get_totp_token
 
 url = "https://auth-mfa.nagoya-u.ac.jp/cas/login?service=https%3A%2F%2Fct.nagoya-u.ac.jp%2Fsakai-login-tool%2Fcontainer"
 
@@ -60,10 +60,7 @@ def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session
     # tokenを含めてpostする．nuctのトップ画面が返ってくる．
     nuct_top_page = session.post(url, data=payload)
     nuct_top_page.raise_for_status()  # 200以外でエラー
-
-    print(nuct_top_page.status_code)
-    print(session.cookies)
-    print(nuct_top_page.cookies)
-    # return session
+    
+    return session
     
 
