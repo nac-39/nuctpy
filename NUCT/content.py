@@ -20,7 +20,7 @@ class Content(NUCT):
             - dictに変換して返す.
             format=xmlのとき
             - xmlのまま返す.
-            
+
         Errors:
             KeyError: formatがjsonかxmlでない時に送出する.
         """
@@ -30,15 +30,15 @@ class Content(NUCT):
         url = self.content_url + f"/site/{siteid}.{format}"
         res = self.session.get(url)
         return res.text
-    
+
     def load_contents_url(self, siteid):
         """
         siteidの授業のリソースのURLのリストを返す.
         Content.site()のラッパー関数．
-        
+
         Args: 
             siteid: string  nuctのsiteid. 2022_1002140みたいな形式.
-        
+
         Returns:
             list    リソースのURLのリスト.
         """
@@ -48,4 +48,3 @@ class Content(NUCT):
             if not d["url"].split("/")[-1] == "":
                 url_list.append(d["url"])
         return url_list
-        
