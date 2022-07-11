@@ -1,4 +1,7 @@
+from email.quoprimime import unquote
+from urllib.parse import unquote, urlparse
 from .nuct import NUCT
+import os
 
 
 class Content(NUCT):
@@ -24,9 +27,6 @@ class Content(NUCT):
         Errors:
             KeyError: formatがjsonかxmlでない時に送出する.
         """
-        if not format in ["json", "xml"]:
-            raise KeyError(
-                f"Invalid format: {format} is invalid. format must be json or xml. (Default is json)")
         url = self.content_url + f"/site/{siteid}.{format}"
         res = self.session.get(url)
         return res.text
@@ -48,3 +48,31 @@ class Content(NUCT):
             if not d["url"].split("/")[-1] == "":
                 url_list.append(d["url"])
         return url_list
+
+    def load_contents(self, url_list: list[str], save_path=os.path.expanduser("~/Desktop")):
+        """
+        NUCTの認証が必要なURLからファイルをダウンロードするための関数.
+        Content()の初期化が必要．
+        一応, NUCT以外のドメインにはアクセスできないようにしておく.(セッション情報を送ってしまうと怖いため)
+
+        Args:
+            url_list: str   nuctのリソースのURLを想定.
+            save_path: str  デフォルトはデスクトップ．ファイル名は含まない．
+
+        Returns:
+            無し．
+        """
+        for url in url_list:
+            if urlparse(url).netloc != self._urls.domain:
+                print(f"{urlparse(url).netloc}は許可されていません．")
+                continue
+            else:
+                res = self.session.get(url, stream=True)
+                # urlエンコーディングをデコードする
+                filename = unquote(os.path.basename(url))
+                # チャンクで分割して保存する
+                with open(os.path.join(save_path, filename), "wb") as f:
+                    for chunk in res.iter_content(chunk_size=1024):
+                        if chunk:
+                            f.write(chunk)
+                            f.flush()
