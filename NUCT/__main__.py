@@ -1,6 +1,5 @@
 if __name__ == "__main__":
-    from .nuct import NUCT
-    nuct = NUCT()
-    print(nuct.content("2021_1000070"))
-    for d in nuct.content_data["2021_1000070"]:
-        print(d["title"], d["url"])
+    from .content import Content
+    content = Content()
+    print(content.site("2022_1002140"))
+    print(content.load_contents_url("2022_1002140"))
