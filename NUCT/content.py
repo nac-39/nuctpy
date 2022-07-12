@@ -1,12 +1,11 @@
-from email.quoprimime import unquote
 from urllib.parse import unquote, urlparse
 from .nuct import NUCT
 import os
 
 
 class Content(NUCT):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, session=None):
+        super().__init__(session)
         self.content_url = self._urls.direct + "/content"
 
     @NUCT.formatter
@@ -29,7 +28,7 @@ class Content(NUCT):
         """
         url = self.content_url + f"/site/{siteid}.{format}"
         res = self.session.get(url)
-        return res.text
+        return res
 
     def load_contents_url(self, siteid):
         """

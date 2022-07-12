@@ -36,7 +36,7 @@ def get_payload(html):
 
 def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session:
     # sessionの開始
-    session = requests.session()
+    session = requests.Session()
 
     # 認証のトップページにアクセス
     auth_top_page = session.get(url)
