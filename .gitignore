@@ -2,6 +2,7 @@
 ### https://raw.github.com/github/gitignore/ce5da10a3a43c4dd8bd9572eda17c0a37ee0eac1/Python.gitignore
 
 .dev
+.pyenv
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
