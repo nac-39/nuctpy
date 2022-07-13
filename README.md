@@ -1,4 +1,4 @@
-# NUCT_api_wrapper[WIP]
+# [WIP]NUCT_api_wrapper
 
 名古屋大学のLMSであるNUCTのAPIのラッパーです．
 
@@ -10,3 +10,28 @@
 万が一，パスワードやシード値を安全ではない方法で使ってしまった場合，直ちにそれらを破棄し新しいものに変えてください．
 
 # 使い方
+```bash
+$ git clone git@github.com:nac-39/NUCT_api_wrapper.git
+$ cd NUCT_api_wrapper
+
+# 仮想環境を有効にする場合
+$ python -m venv .venv
+$ source .venv/bin/activate
+
+# .envファイルにIDとパスワード，シード値を登録する
+$ cat << EOF > .env
+MEIDAI_ID=
+MEIDAI_PWD=
+SEED=
+EOF
+
+# 必要なパッケージをインストール
+$ pip install -r ./NUCT/requirements.txt
+
+# NUCTパッケージをインストールする
+$ pip install -e .
+
+# [WIP]nuct-cliを使う
+$ nuct-cli
+$ nuct-cli --help
+```
