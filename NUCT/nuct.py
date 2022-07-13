@@ -24,7 +24,7 @@ class NUCT:
                                           )
         else:
             self.session = session
-        _res = self.session.get(f"{self._urls.direct}/site.json?limit=0")
+        _res = self.session.get(f"{self._urls.direct}/site.json?_limit=0")
         self.site_data = json.loads(_res.text)["site_collection"]
 
     @classmethod

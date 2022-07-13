@@ -44,7 +44,7 @@ def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session
     # formのname,valueの組を取得
     payload = get_payload(auth_top_page.text)
     payload.update({"username": USER_NAME, "password": PASSWORD})
-    print(auth_top_page.status_code)
+    print("top page: ", auth_top_page.status_code)
 
     time.sleep(0.3)
 
@@ -53,14 +53,14 @@ def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session
     auth_token_page.raise_for_status()  # 200以外でエラー
     payload = get_payload(auth_token_page.text)
     payload.update({"token": get_totp_token(SEED)})
-    print(auth_token_page.status_code)
+    print("id & password auth: ", auth_token_page.status_code)
 
     time.sleep(0.3)
 
     # tokenを含めてpostする．nuctのトップ画面が返ってくる．
     nuct_top_page = session.post(url, data=payload)
     nuct_top_page.raise_for_status()  # 200以外でエラー
-    
+    print("token auth: ", nuct_top_page.status_code)
     return session
     
 
