@@ -1,3 +1,8 @@
+"""
+Assignment
+
+課題の一覧を操作するクラス．現在はAPIを叩くだけの関数のみ．
+"""
 from urllib.parse import unquote, urlparse
 from .nuct import NUCT
 
@@ -9,12 +14,31 @@ class Assignment(NUCT):
 
     @NUCT.formatter
     def site(self, siteid, format="json"):
+        """
+        ある授業のsiteidを指定して，その授業の課題一覧を取得する．
+        
+        Args:
+            siteid: string  授業のid. 2022_1002140みたいな形式．
+            format: stirng  jsonかxml．デフォルトはjson．
+        
+        Returns:
+            res: list[dict]   NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
+        """
         url = self.assignment_url + f"/site/{siteid}.{format}"
         res = self.session.get(url)
         return res
     
     @NUCT.formatter
     def my(self, format="json"):
+        """
+        全ての課題一覧を取得する．
+        
+        Args:
+            format: stirng  jsonかxml．デフォルトはjson．
+        
+        Returns:
+            res: list[dict]   NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
+        """
         url = self.assignment_url + f"/my.{format}"
         res = self.session.get(url)
         return res
