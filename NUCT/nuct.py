@@ -1,7 +1,7 @@
 import json
 from collections import namedtuple
 from urllib.parse import urlparse
-from .utirities import login_with_mfa
+from .utilities import login_with_mfa
 from . import settings
 
 Var = namedtuple('Vars', ("username", "password", "seed"))
