@@ -5,15 +5,15 @@ import NUCT
 
 @click.group()
 def nuct():
-    print("hello")
+    pass
 
-@click.option("--all", "-a", default=False, is_flag=True)
-@click.option("--detail", "-d", default=False, is_flag=True)
-@click.option("--id", "-i", default=False, is_flag=True)
-@click.option("--year", "-y", default=None)
+@click.option("--all", "-a", default=False, is_flag=True, help="全ての講義を表示します")
+@click.option("--detail", "-d", default=False, is_flag=True, help="講義の説明を表示します")
+@click.option("--id", "-i", default=False, is_flag=True, help="講義のsiteidを表示します")
+@click.option("--year", "-y", default=None, help="講義の年度を指定します")
 @nuct.command()
 def site(all, detail, id, year):
-    nuct = NUCT()
+    nuct = NUCT.NUCT()
     _data = nuct.site_data
     if all:
         num = len(_data)
@@ -49,4 +49,10 @@ def content(siteid, link, download, grep):
                 dl = True
         click.echo("💾: "*dl + d["entityTitle"] + ("\t" + d["url"])*link)
 
-    
+
+@nuct.command()
+def assignment():
+    a = NUCT.Assignment()
+    data = a.my()
+    for d in data:
+        click.echo(a.site_id_title[d["context"]] + "\t" + d["entityTitle"])
