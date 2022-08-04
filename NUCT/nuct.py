@@ -1,7 +1,7 @@
 import json
 from collections import namedtuple
 from urllib.parse import urlparse
-from .utirities import login_with_mfa
+from .utilities import login_with_mfa
 from . import settings
 
 Var = namedtuple('Vars', ("username", "password", "seed"))
@@ -24,7 +24,8 @@ class NUCT:
                                           )
         else:
             self.session = session
-        _res = self.session.get(f"{self._urls.direct}/site.json?_limit=100000")
+
+        _res = self.session.get(f"{self._urls.direct}/site.json?_limit=1000000")=
         self.site_data = json.loads(_res.text)["site_collection"]
         self.site_id_title = {}
         for d in self.site_data:
