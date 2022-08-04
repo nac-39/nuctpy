@@ -29,7 +29,7 @@ def site(detail, id, year):
 
 
 @click.option("--out", "-o", type=click.Path(exists=True,  dir_okay=True, file_okay=False), default=None, help="ファイルの保存先ディレクトリを指定します")
-@click.option("--grep", "-g", multiple=True, default=(), help="リソースの名前の一部を指定します")
+@click.option("--grep", "-g", multiple=True, default=[""], help="リソースの名前の一部を指定します")
 @click.option("--download", "-d", default=False, is_flag=True, help="コンテンツを全てダウンロードします")
 @click.option("--link", "-l", default=False, is_flag=True, help="URLを表示します")
 @click.argument("siteid")
