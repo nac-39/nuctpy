@@ -46,7 +46,7 @@ def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session
     payload.update({"username": USER_NAME, "password": PASSWORD})
     print("top page: ", auth_top_page.status_code)
 
-    time.sleep(0.3)
+    # time.sleep(0.3)
 
     # username,passwordをpostする．多要素認証画面が返ってくる．
     auth_token_page = session.post(url, data=payload)
@@ -55,7 +55,7 @@ def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session
     payload.update({"token": get_totp_token(SEED)})
     print("id & password auth: ", auth_token_page.status_code)
 
-    time.sleep(0.3)
+    # time.sleep(0.3)
 
     # tokenを含めてpostする．nuctのトップ画面が返ってくる．
     nuct_top_page = session.post(url, data=payload)

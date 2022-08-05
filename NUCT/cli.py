@@ -1,4 +1,5 @@
 import click
+import datetime
 import NUCT
 
 
@@ -70,3 +71,27 @@ def assignment():
     data = a.my()
     for d in data:
         click.echo(a.site_id_title[d["context"]] + "\t" + d["entityTitle"])
+
+
+@click.argument("siteid")
+@nuct.command()
+def quiz(siteid):
+    q = NUCT.Quiz()
+    data = q.context(siteid)
+    echo_data = {}
+    for d in data:
+        echo_data.update({d["entityTitle"]:datetime.datetime.fromtimestamp(d["dueDate"]/1000)})
+    echo_data = sorted(echo_data.items(), key=lambda x:x[1])
+    
+    click.secho(q.site_id_title[data[0]["ownerSiteId"]], bold=True)
+    for d in echo_data:
+        if d[1] - datetime.timedelta(days=3) < datetime.datetime.now():
+            fg = "red"
+        elif d[1] - datetime.timedelta(days=7) < datetime.datetime.now():
+            fg = "yellow"
+        else:
+            fg = "green"
+        date = datetime.datetime.fromisoformat(str(d[1])).strftime("%Y-%m-%d %H:%M")
+        click.echo(click.style(date, fg=fg) + "\t" + d[0])
+        
+        

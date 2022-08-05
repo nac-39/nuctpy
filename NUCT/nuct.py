@@ -25,19 +25,18 @@ class NUCT:
         else:
             self.session = session
 
-        _res = self.session.get(f"{self._urls.direct}/site.json?_limit=1000000")
+        _res = self.session.get(
+            f"{self._urls.direct}/site.json?_limit=1000000")
         self.site_data = json.loads(_res.text)["site_collection"]
         self.site_id_title = {}
         for d in self.site_data:
             self.site_id_title.update({d["entityId"]: d["entityTitle"]})
-        
 
     @classmethod
     def create_session(cls):
         return login_with_mfa(cls._vars.username,
                               cls._vars.password,
                               cls._vars.seed)
-
 
     @staticmethod
     def formatter(func):
@@ -47,7 +46,7 @@ class NUCT:
             format = kwargs["format"] if "format" in kwargs.keys() else "json"
             if not format in ["json", "xml"]:
                 raise KeyError(
-                f"Invalid format: {format} is invalid. format must be json or xml. (Default is json)")
+                    f"Invalid format: {format} is invalid. format must be json or xml. (Default is json)")
             res = func(*args, **kwargs)
             res.raise_for_status()  # 200以外でエラー
             if res.status_code == 200:
