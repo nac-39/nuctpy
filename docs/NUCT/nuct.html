@@ -29,7 +29,7 @@
 <pre><code class="python">import json
 from collections import namedtuple
 from urllib.parse import urlparse
-from .utirities import login_with_mfa
+from .utilities import login_with_mfa
 from . import settings
 
 Var = namedtuple(&#39;Vars&#39;, (&#34;username&#34;, &#34;password&#34;, &#34;seed&#34;))
@@ -37,18 +37,34 @@ Urls = namedtuple(&#39;Urls&#39;, (&#34;portal&#34;, &#34;direct&#34;, &#34;doma
 
 
 class NUCT:
-    def __init__(self):
-        self._vars = Var(username=settings.MEIDAI_ID,
-                         password=settings.MEIDAI_PWD,
-                         seed=settings.SEED)
-        self._urls = Urls(portal=settings.NUCT_ROOT+&#34;/portal&#34;,
-                          direct=settings.NUCT_ROOT+&#34;/direct&#34;,
-                          domain=urlparse(settings.NUCT_ROOT).netloc)
-        self.session = login_with_mfa(self._vars.username,
-                                      self._vars.password,
-                                      self._vars.seed)
-        _res = self.session.get(f&#34;{self._urls.direct}/site.json?limit=0&#34;)
-        self.site_data = json.loads(_res.text)
+    _vars = Var(username=settings.MEIDAI_ID,
+                password=settings.MEIDAI_PWD,
+                seed=settings.SEED)
+    _urls = Urls(portal=settings.NUCT_ROOT+&#34;/portal&#34;,
+                 direct=settings.NUCT_ROOT+&#34;/direct&#34;,
+                 domain=urlparse(settings.NUCT_ROOT).netloc)
+
+    def __init__(self, session=None):
+        if session is None:
+            self.session = login_with_mfa(self._vars.username,
+                                          self._vars.password,
+                                          self._vars.seed
+                                          )
+        else:
+            self.session = session
+
+        _res = self.session.get(f&#34;{self._urls.direct}/site.json?_limit=1000000&#34;)
+        self.site_data = json.loads(_res.text)[&#34;site_collection&#34;]
+        self.site_id_title = {}
+        for d in self.site_data:
+            self.site_id_title.update({d[&#34;entityId&#34;]: d[&#34;entityTitle&#34;]})
+        
+
+    @classmethod
+    def create_session(cls):
+        return login_with_mfa(cls._vars.username,
+                              cls._vars.password,
+                              cls._vars.seed)
 
 
     @staticmethod
@@ -61,13 +77,16 @@ class NUCT:
                 raise KeyError(
                 f&#34;Invalid format: {format} is invalid. format must be json or xml. (Default is json)&#34;)
             res = func(*args, **kwargs)
-            # jsonのときはdictに変換してあげる
-            if format == &#39;json&#39;:
-                return json.loads(res)
-            elif format == &#34;xml&#34;:
-                return res
-            else:
-                return res
+            res.raise_for_status()  # 200以外でエラー
+            if res.status_code == 200:
+                # jsonのときはdictに変換してあげて，メインの部分だけ抜き出してあげる
+                if format == &#39;json&#39;:
+                    tmp = json.loads(res.text)
+                    return tmp[tmp[&#34;entityPrefix&#34;] + &#34;_collection&#34;]
+                elif format == &#34;xml&#34;:
+                    return res
+                else:
+                    return res
         return wrapper</code></pre>
 </details>
 </section>
@@ -82,6 +101,7 @@ class NUCT:
 <dl>
 <dt id="NUCT.nuct.NUCT"><code class="flex name class">
 <span>class <span class="ident">NUCT</span></span>
+<span>(</span><span>session=None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -90,18 +110,34 @@ class NUCT:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class NUCT:
-    def __init__(self):
-        self._vars = Var(username=settings.MEIDAI_ID,
-                         password=settings.MEIDAI_PWD,
-                         seed=settings.SEED)
-        self._urls = Urls(portal=settings.NUCT_ROOT+&#34;/portal&#34;,
-                          direct=settings.NUCT_ROOT+&#34;/direct&#34;,
-                          domain=urlparse(settings.NUCT_ROOT).netloc)
-        self.session = login_with_mfa(self._vars.username,
-                                      self._vars.password,
-                                      self._vars.seed)
-        _res = self.session.get(f&#34;{self._urls.direct}/site.json?limit=0&#34;)
-        self.site_data = json.loads(_res.text)
+    _vars = Var(username=settings.MEIDAI_ID,
+                password=settings.MEIDAI_PWD,
+                seed=settings.SEED)
+    _urls = Urls(portal=settings.NUCT_ROOT+&#34;/portal&#34;,
+                 direct=settings.NUCT_ROOT+&#34;/direct&#34;,
+                 domain=urlparse(settings.NUCT_ROOT).netloc)
+
+    def __init__(self, session=None):
+        if session is None:
+            self.session = login_with_mfa(self._vars.username,
+                                          self._vars.password,
+                                          self._vars.seed
+                                          )
+        else:
+            self.session = session
+
+        _res = self.session.get(f&#34;{self._urls.direct}/site.json?_limit=1000000&#34;)
+        self.site_data = json.loads(_res.text)[&#34;site_collection&#34;]
+        self.site_id_title = {}
+        for d in self.site_data:
+            self.site_id_title.update({d[&#34;entityId&#34;]: d[&#34;entityTitle&#34;]})
+        
+
+    @classmethod
+    def create_session(cls):
+        return login_with_mfa(cls._vars.username,
+                              cls._vars.password,
+                              cls._vars.seed)
 
 
     @staticmethod
@@ -114,21 +150,43 @@ class NUCT:
                 raise KeyError(
                 f&#34;Invalid format: {format} is invalid. format must be json or xml. (Default is json)&#34;)
             res = func(*args, **kwargs)
-            # jsonのときはdictに変換してあげる
-            if format == &#39;json&#39;:
-                return json.loads(res)
-            elif format == &#34;xml&#34;:
-                return res
-            else:
-                return res
+            res.raise_for_status()  # 200以外でエラー
+            if res.status_code == 200:
+                # jsonのときはdictに変換してあげて，メインの部分だけ抜き出してあげる
+                if format == &#39;json&#39;:
+                    tmp = json.loads(res.text)
+                    return tmp[tmp[&#34;entityPrefix&#34;] + &#34;_collection&#34;]
+                elif format == &#34;xml&#34;:
+                    return res
+                else:
+                    return res
         return wrapper</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="NUCT.assignment.Assignment" href="assignment.html#NUCT.assignment.Assignment">Assignment</a></li>
 <li><a title="NUCT.content.Content" href="content.html#NUCT.content.Content">Content</a></li>
+<li><a title="NUCT.quiz.Quiz" href="quiz.html#NUCT.quiz.Quiz">Quiz</a></li>
+<li><a title="NUCT.roster.Roster" href="roster.html#NUCT.roster.Roster">Roster</a></li>
 </ul>
 <h3>Static methods</h3>
 <dl>
+<dt id="NUCT.nuct.NUCT.create_session"><code class="name flex">
+<span>def <span class="ident">create_session</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def create_session(cls):
+    return login_with_mfa(cls._vars.username,
+                          cls._vars.password,
+                          cls._vars.seed)</code></pre>
+</details>
+</dd>
 <dt id="NUCT.nuct.NUCT.formatter"><code class="name flex">
 <span>def <span class="ident">formatter</span></span>(<span>func)</span>
 </code></dt>
@@ -148,13 +206,16 @@ def formatter(func):
             raise KeyError(
             f&#34;Invalid format: {format} is invalid. format must be json or xml. (Default is json)&#34;)
         res = func(*args, **kwargs)
-        # jsonのときはdictに変換してあげる
-        if format == &#39;json&#39;:
-            return json.loads(res)
-        elif format == &#34;xml&#34;:
-            return res
-        else:
-            return res
+        res.raise_for_status()  # 200以外でエラー
+        if res.status_code == 200:
+            # jsonのときはdictに変換してあげて，メインの部分だけ抜き出してあげる
+            if format == &#39;json&#39;:
+                tmp = json.loads(res.text)
+                return tmp[tmp[&#34;entityPrefix&#34;] + &#34;_collection&#34;]
+            elif format == &#34;xml&#34;:
+                return res
+            else:
+                return res
     return wrapper</code></pre>
 </details>
 </dd>
@@ -231,6 +292,7 @@ def formatter(func):
 <li>
 <h4><code><a title="NUCT.nuct.NUCT" href="#NUCT.nuct.NUCT">NUCT</a></code></h4>
 <ul class="">
+<li><code><a title="NUCT.nuct.NUCT.create_session" href="#NUCT.nuct.NUCT.create_session">create_session</a></code></li>
 <li><code><a title="NUCT.nuct.NUCT.formatter" href="#NUCT.nuct.NUCT.formatter">formatter</a></code></li>
 </ul>
 </li>

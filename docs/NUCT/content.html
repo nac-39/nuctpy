@@ -26,15 +26,14 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from email.quoprimime import unquote
-from urllib.parse import unquote, urlparse
+<pre><code class="python">from urllib.parse import unquote, urlparse
 from .nuct import NUCT
 import os
 
 
 class Content(NUCT):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, session=None):
+        super().__init__(session)
         self.content_url = self._urls.direct + &#34;/content&#34;
 
     @NUCT.formatter
@@ -57,7 +56,7 @@ class Content(NUCT):
         &#34;&#34;&#34;
         url = self.content_url + f&#34;/site/{siteid}.{format}&#34;
         res = self.session.get(url)
-        return res.text
+        return res
 
     def load_contents_url(self, siteid):
         &#34;&#34;&#34;
@@ -117,6 +116,7 @@ class Content(NUCT):
 <dl>
 <dt id="NUCT.content.Content"><code class="flex name class">
 <span>class <span class="ident">Content</span></span>
+<span>(</span><span>session=None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -125,8 +125,8 @@ class Content(NUCT):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Content(NUCT):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, session=None):
+        super().__init__(session)
         self.content_url = self._urls.direct + &#34;/content&#34;
 
     @NUCT.formatter
@@ -149,7 +149,7 @@ class Content(NUCT):
         &#34;&#34;&#34;
         url = self.content_url + f&#34;/site/{siteid}.{format}&#34;
         res = self.session.get(url)
-        return res.text
+        return res
 
     def load_contents_url(self, siteid):
         &#34;&#34;&#34;
@@ -306,13 +306,16 @@ nuctのsiteid. 2022_1002140みたいな形式.</p>
         raise KeyError(
         f&#34;Invalid format: {format} is invalid. format must be json or xml. (Default is json)&#34;)
     res = func(*args, **kwargs)
-    # jsonのときはdictに変換してあげる
-    if format == &#39;json&#39;:
-        return json.loads(res)
-    elif format == &#34;xml&#34;:
-        return res
-    else:
-        return res</code></pre>
+    res.raise_for_status()  # 200以外でエラー
+    if res.status_code == 200:
+        # jsonのときはdictに変換してあげて，メインの部分だけ抜き出してあげる
+        if format == &#39;json&#39;:
+            tmp = json.loads(res.text)
+            return tmp[tmp[&#34;entityPrefix&#34;] + &#34;_collection&#34;]
+        elif format == &#34;xml&#34;:
+            return res
+        else:
+            return res</code></pre>
 </details>
 </dd>
 </dl>
