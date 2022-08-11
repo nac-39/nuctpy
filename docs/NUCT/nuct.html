@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>NUCT.nuct API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="NUCT …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,11 +22,19 @@
 <h1 class="title">Module <code>NUCT.nuct</code></h1>
 </header>
 <section id="section-intro">
+<p>NUCT</p>
+<p>各種エンドポイントを叩くときに共通に必要な関数を提供する。</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import json
+<pre><code class="python">&#34;&#34;&#34;
+NUCT
+
+各種エンドポイントを叩くときに共通に必要な関数を提供する。
+
+&#34;&#34;&#34;
+import json
 from collections import namedtuple
 from urllib.parse import urlparse
 from .utilities import login_with_mfa
@@ -45,6 +53,10 @@ class NUCT:
                  domain=urlparse(settings.NUCT_ROOT).netloc)
 
     def __init__(self, session=None):
+        &#34;&#34;&#34;
+        NUCT
+        
+        &#34;&#34;&#34;
         if session is None:
             self.session = login_with_mfa(self._vars.username,
                                           self._vars.password,
@@ -62,6 +74,18 @@ class NUCT:
 
     @classmethod
     def create_session(cls):
+        &#34;&#34;&#34;
+        NUCTにログインした後の状態のsessionオブジェクトを返す。
+        一つのプログラムの中で、複数のAPIにアクセスしたい時（ex. NUCT.ContentもNUCT.Assignmentも使いたい！というとき）
+        に、毎回セッションを作り直さずに、セッションオブジェクトを使い回すために使います。
+        
+        例:
+        ```python
+        nuct_session = NUCT.create_session()
+        content = NUCT.Content(nuct_session)
+        assignment = NUCT.Assignment(nuct_session)
+        ```
+        &#34;&#34;&#34;
         return login_with_mfa(cls._vars.username,
                               cls._vars.password,
                               cls._vars.seed)
@@ -69,6 +93,13 @@ class NUCT:
 
     @staticmethod
     def formatter(func):
+        &#34;&#34;&#34;
+        デコレーターとして用いる。
+        
+        機能  
+        1. フォーマットがjson/xmlであるか検証する。  
+        2. フォーマットがjsonの時は、メインデータを抜き出し、dictにして返す。  
+        &#34;&#34;&#34;
         def wrapper(*args, **kwargs):
             # 関数を呼び出す時に明示的にformat=を指定しておかないと，
             # kwargsに値が入らない場合がある．
@@ -104,7 +135,7 @@ class NUCT:
 <span>(</span><span>session=None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>NUCT</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -118,6 +149,10 @@ class NUCT:
                  domain=urlparse(settings.NUCT_ROOT).netloc)
 
     def __init__(self, session=None):
+        &#34;&#34;&#34;
+        NUCT
+        
+        &#34;&#34;&#34;
         if session is None:
             self.session = login_with_mfa(self._vars.username,
                                           self._vars.password,
@@ -135,6 +170,18 @@ class NUCT:
 
     @classmethod
     def create_session(cls):
+        &#34;&#34;&#34;
+        NUCTにログインした後の状態のsessionオブジェクトを返す。
+        一つのプログラムの中で、複数のAPIにアクセスしたい時（ex. NUCT.ContentもNUCT.Assignmentも使いたい！というとき）
+        に、毎回セッションを作り直さずに、セッションオブジェクトを使い回すために使います。
+        
+        例:
+        ```python
+        nuct_session = NUCT.create_session()
+        content = NUCT.Content(nuct_session)
+        assignment = NUCT.Assignment(nuct_session)
+        ```
+        &#34;&#34;&#34;
         return login_with_mfa(cls._vars.username,
                               cls._vars.password,
                               cls._vars.seed)
@@ -142,6 +189,13 @@ class NUCT:
 
     @staticmethod
     def formatter(func):
+        &#34;&#34;&#34;
+        デコレーターとして用いる。
+        
+        機能  
+        1. フォーマットがjson/xmlであるか検証する。  
+        2. フォーマットがjsonの時は、メインデータを抜き出し、dictにして返す。  
+        &#34;&#34;&#34;
         def wrapper(*args, **kwargs):
             # 関数を呼び出す時に明示的にformat=を指定しておかないと，
             # kwargsに値が入らない場合がある．
@@ -175,13 +229,32 @@ class NUCT:
 <span>def <span class="ident">create_session</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>NUCTにログインした後の状態のsessionオブジェクトを返す。
+一つのプログラムの中で、複数のAPIにアクセスしたい時（ex. NUCT.ContentもNUCT.Assignmentも使いたい！というとき）
+に、毎回セッションを作り直さずに、セッションオブジェクトを使い回すために使います。</p>
+<p>例:</p>
+<pre><code class="language-python">nuct_session = NUCT.create_session()
+content = NUCT.Content(nuct_session)
+assignment = NUCT.Assignment(nuct_session)
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
 def create_session(cls):
+    &#34;&#34;&#34;
+    NUCTにログインした後の状態のsessionオブジェクトを返す。
+    一つのプログラムの中で、複数のAPIにアクセスしたい時（ex. NUCT.ContentもNUCT.Assignmentも使いたい！というとき）
+    に、毎回セッションを作り直さずに、セッションオブジェクトを使い回すために使います。
+    
+    例:
+    ```python
+    nuct_session = NUCT.create_session()
+    content = NUCT.Content(nuct_session)
+    assignment = NUCT.Assignment(nuct_session)
+    ```
+    &#34;&#34;&#34;
     return login_with_mfa(cls._vars.username,
                           cls._vars.password,
                           cls._vars.seed)</code></pre>
@@ -191,13 +264,23 @@ def create_session(cls):
 <span>def <span class="ident">formatter</span></span>(<span>func)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>デコレーターとして用いる。</p>
+<p>機能<br>
+1. フォーマットがjson/xmlであるか検証する。<br>
+2. フォーマットがjsonの時は、メインデータを抜き出し、dictにして返す。</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@staticmethod
 def formatter(func):
+    &#34;&#34;&#34;
+    デコレーターとして用いる。
+    
+    機能  
+    1. フォーマットがjson/xmlであるか検証する。  
+    2. フォーマットがjsonの時は、メインデータを抜き出し、dictにして返す。  
+    &#34;&#34;&#34;
     def wrapper(*args, **kwargs):
         # 関数を呼び出す時に明示的にformat=を指定しておかないと，
         # kwargsに値が入らない場合がある．

@@ -4,6 +4,7 @@ Assignment
 課題の一覧を操作するクラス．現在はAPIを叩くだけの関数のみ．
 """
 from urllib.parse import unquote, urlparse
+
 from .nuct import NUCT
 
 
@@ -27,7 +28,7 @@ class Assignment(NUCT):
         url = self.assignment_url + f"/site/{siteid}.{format}"
         res = self.session.get(url)
         return res
-    
+
     @NUCT.formatter
     def my(self, format="json"):
         """
@@ -49,5 +50,5 @@ class Assignment(NUCT):
         試したけど使えなかった. 404が帰ってくる
         """
         url = self.assignment_url + f"/site/{assignmentId}.{format}"
-        res = self.session.get(url)
+        res = self.get_session().get(url)
         return res
