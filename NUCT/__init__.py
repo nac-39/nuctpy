@@ -4,3 +4,4 @@ from .nuct import NUCT
 from .quiz import Quiz
 from .roster import Roster
 from .settings import *
+from .announcement import Announcement

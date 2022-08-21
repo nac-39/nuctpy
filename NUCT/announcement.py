@@ -19,7 +19,7 @@ class Announcement(NUCT):
         Returns:
             dict: 一覧を辞書の配列で返す
         """
-        url = self.announcement_url + f"/{siteid}.{format}"
+        url = self.announcement_url + f"/site/{siteid}.{format}"
         res = self.session.get(url)
         return res
 
