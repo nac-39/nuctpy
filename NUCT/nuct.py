@@ -100,10 +100,10 @@ class NUCT:
         """多要素認証にログイン済みの状態でURLにgetリクエストを送る
 
         Args:
-            url (url): _description_
+            url (url): https://ct.nagoya-u.ac.jpから始まるURLのみ許可されています。
 
         Returns:
-            Request: _description_
+            Request: Requestオブジェクト。 
         """
         parsed = urlparse(url)
         print(parsed.scheme)
