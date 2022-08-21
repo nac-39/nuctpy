@@ -9,5 +9,5 @@ class Roster(NUCT):
     @NUCT.formatter
     def site(self, siteid, format="json"):
         url = self.roster_url + f"/site/{siteid}.{format}"
-        res = self.session.get(url)
+        res = self.get_session().get(url)
         return res

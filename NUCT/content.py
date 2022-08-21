@@ -1,6 +1,7 @@
-from urllib.parse import unquote, urlparse
-from .nuct import NUCT
 import os
+from urllib.parse import unquote, urlparse
+
+from .nuct import NUCT
 
 
 class Content(NUCT):
@@ -66,7 +67,7 @@ class Content(NUCT):
                 print(f"{urlparse(url).netloc}は許可されていません．")
                 continue
             else:
-                res = self.session.get(url, stream=True)
+                res = self.get_session().get(url, stream=True)
                 # urlエンコーディングをデコードする
                 filename = unquote(os.path.basename(url))
                 # チャンクで分割して保存する

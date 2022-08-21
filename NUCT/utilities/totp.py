@@ -2,7 +2,12 @@
 # こちらの記事のを使わせていただきました
 
 
-import hmac, base64, struct, hashlib, time
+import base64
+import hashlib
+import hmac
+import struct
+import time
+
 
 def get_hotp_token(secret: str, intervals_no: int) -> str:
     # まずシークレットキーをデコード

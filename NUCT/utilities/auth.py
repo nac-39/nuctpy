@@ -1,10 +1,13 @@
-import requests
-from html.parser import HTMLParser
 import time
+from html.parser import HTMLParser
+
+import requests
+
 from .totp import get_totp_token
+from ..settings import MFA_CAS_URL
 
-url = "https://auth-mfa.nagoya-u.ac.jp/cas/login?service=https%3A%2F%2Fct.nagoya-u.ac.jp%2Fsakai-login-tool%2Fcontainer"
 
+url = MFA_CAS_URL
 
 class GetInputParser(HTMLParser):
     def __init__(self):
@@ -35,6 +38,16 @@ def get_payload(html):
 
 
 def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session:
+    """NUCTの多要素認証を突破し、認証済みCookieを持ったセッションオブジェクトを返す
+
+    Args:
+        USER_NAME (str): 認証のユーザー名（名大ID）
+        PASSWORD (str): 認証のパスワード（名大IDのパスワード）
+        SEED (str): 多要素認証のシード値
+
+    Returns:
+        requests.session: 認証済みCookieを持ったセッションオブジェクト
+    """
     # sessionの開始
     session = requests.Session()
 
