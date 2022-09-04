@@ -54,7 +54,7 @@ def content(siteid, link, download, grep, out):
             return
         d = data[0]
         is_downloaded = False
-        contains_any_of_words_in_grep = any(g in d["title"] for g in grep) or any(g in d[""])
+        contains_any_of_words_in_grep = any(g in d["title"] for g in grep)
         is_directory = d["type"] == "collection"
         dir_count = len(d["container"].split("/")) - 4
         try:
