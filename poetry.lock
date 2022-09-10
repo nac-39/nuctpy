@@ -238,6 +238,18 @@ Markdown = ">=3.3"
 mkdocs = ">=1.1"
 
 [[package]]
+name = "mkdocs-click"
+version = "0.8.0"
+description = "An MkDocs extension to generate documentation for Click command line applications"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+click = ">=8.1,<9.0"
+markdown = ">=3.0.0,<4.0.0"
+
+[[package]]
 name = "mkdocs-gen-files"
 version = "0.4.0"
 description = "MkDocs plugin to programmatically generate documentation pages during the build"
@@ -282,6 +294,17 @@ description = "Extension pack for Python Markdown."
 category = "dev"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "mkdocs-section-index"
+version = "0.3.4"
+description = "MkDocs plugin to allow clickable sections that lead to an index page"
+category = "dev"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.dependencies]
+mkdocs = ">=1.1,<2.0"
 
 [[package]]
 name = "mkdocstrings"
@@ -636,7 +659,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "7cb93afff4ceca9db564be84816da4f660024c38a2df642bcb8fbd52a9280570"
+content-hash = "b4d4dfc349ab4163f64e82abf2e5f44204ea8fe46aa721312df93fb63b9564e4"
 
 [metadata.files]
 attrs = []
@@ -663,10 +686,12 @@ markupsafe = []
 mergedeep = []
 mkdocs = []
 mkdocs-autorefs = []
+mkdocs-click = []
 mkdocs-gen-files = []
 mkdocs-literate-nav = []
 mkdocs-material = []
 mkdocs-material-extensions = []
+mkdocs-section-index = []
 mkdocstrings = []
 mkdocstrings-python = []
 mypy = []

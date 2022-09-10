@@ -26,7 +26,8 @@ repo_name: NUCT_api_wrapper
 
 nav:
   - HOME: index.md
-  - DOCS: docs/
+  - DOCS: reference/
+  - CLI: cli.md
 
 plugins:
   - search
@@ -35,9 +36,13 @@ plugins:
         - docs/gen_ref_pages.py
   - literate-nav:
       nav-file: SUMMARY.md
+  - section-index
   - mkdocstrings:
       default_handler: python
       handlers:
         python:
           options:
             show_source: false
+
+markdown_extensions:
+    - mkdocs_click

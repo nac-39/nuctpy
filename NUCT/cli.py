@@ -5,6 +5,7 @@ import NUCT
 
 @click.group()
 def nuct():
+    """root."""
     pass
 
 
@@ -13,6 +14,7 @@ def nuct():
 @click.option("--year", "-y", default=None, help="講義の年度を指定します")
 @nuct.command()
 def site(detail, site_id, year):
+    """授業の一覧を表示."""
     nuct = NUCT.NUCT()
     _data = nuct.site_data  # 授業一覧のjsonを読み込む
     for d in _data:
@@ -42,6 +44,7 @@ def site(detail, site_id, year):
 @click.argument("siteid")
 @nuct.command()
 def content(siteid, link, download, grep, out):
+    """ある授業のリソースの一覧を表示."""
     c = NUCT.Content()
     data = c.site(siteid)
     dir_t = "├──"
@@ -107,6 +110,7 @@ def content(siteid, link, download, grep, out):
 
 @nuct.command()
 def assignment():
+    """課題の一覧を表示."""
     a = NUCT.Assignment()
     data = a.my()
     for d in data:
