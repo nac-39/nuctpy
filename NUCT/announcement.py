@@ -1,4 +1,6 @@
 """Announcement お知らせを取得するためのクラスです。"""
+from typing import Literal
+
 from .nuct import NUCT
 
 
@@ -8,7 +10,7 @@ class Announcement(NUCT):
         self.announcement_url = self._urls.direct + "/announcement"
 
     @NUCT.formatter
-    def site(self, siteid, fmt="json"):
+    def site(self, siteid, fmt: Literal["json", "xml"] = "json"):
         """ある授業のお知らせを取得する関数です。
         Args:
             siteid: string 授業のサイトID
@@ -22,7 +24,7 @@ class Announcement(NUCT):
         return res
 
     @NUCT.formatter
-    def motd(self, fmt="json"):
+    def motd(self, fmt: Literal["json", "xml"] = "json"):
         """今日のお知らせの一覧を取得する関数です。
         Args:
             fmt: "json"|"xml" 出力の形式
@@ -34,7 +36,7 @@ class Announcement(NUCT):
         return res
 
     @NUCT.formatter
-    def user(self, fmt="json"):
+    def user(self, fmt: Literal["json", "xml"] = "json"):
         """あるユーザーのお知らせの一覧を取得する関数です
          Args:
             fmt: "json"|"xml" 出力の形式

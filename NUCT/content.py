@@ -18,7 +18,7 @@ class Content(NUCT):
 
         Args:
             siteid: string  nuctのsiteid. 2022_1002140みたいな形式.
-            format: string  json or xml
+            fmt: string  json or xml
 
         Returns:
             format=jsonのとき

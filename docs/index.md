@@ -1,3 +1,1 @@
-# NUCT_API_WRAPPER
-
-ドキュメントへようこそ！
+# NUCT-API-WRAPPER

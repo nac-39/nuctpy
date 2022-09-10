@@ -16,11 +16,11 @@ class Assignment(NUCT):
         """ある授業のsiteidを指定して，その授業の課題一覧を取得する．
 
         Args:
-            siteid: string  授業のid. 2022_1002140みたいな形式．
-            fmt: stirng  jsonかxml．デフォルトはjson．
+            siteid:  授業のid. 2022_1002140みたいな形式．
+            fmt: jsonかxml．デフォルトはjson．
 
         Returns:
-            res: list[dict]   NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
+            res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
         """
         url = self.assignment_url + f"/site/{siteid}.{fmt}"
         res = self.session.get(url)
@@ -31,10 +31,10 @@ class Assignment(NUCT):
         """全ての課題一覧を取得する．
 
         Args:
-            fmt: stirng  jsonかxml．デフォルトはjson．
+            fmt: jsonかxml．デフォルトはjson．
 
         Returns:
-            res: list[dict]   NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
+            res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
         """
         url = self.assignment_url + f"/my.{fmt}"
         res = self.session.get(url)

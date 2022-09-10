@@ -4,20 +4,18 @@ theme:
 
 nav:
   - HOME: index.md
-  - DOCS: 
-    - NUCT: nuct.md
-    - 課題：Assignment: assignment.md
-    - お知らせ：Announcement: announcement.md
-    - リソース：Content: content.md
-    - 小テスト：Quiz: quiz.md
-    - 参加者：Roster: roster.md
+  - DOCS: docs/
 
 plugins:
-- search
-- mkdocstrings:
-    custom_templates: templates
-    default_handler: python
-    handlers:
-      python:
-        options:
-          show_source: false
+  - search
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - literate-nav:
+      nav-file: SUMMARY.md
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_source: false
