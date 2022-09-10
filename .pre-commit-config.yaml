@@ -53,10 +53,3 @@ repos:
     hooks:
       - id: docformatter
         args: [--in-place]
-
-  - repo: local
-    hooks:
-    - id: mkbuild
-      name: Build the markdown documentation
-      entry: zsh -c 'mkdocs build'
-      language: system

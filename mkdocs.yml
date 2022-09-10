@@ -6,7 +6,11 @@ nav:
   - HOME: index.md
   - DOCS: 
     - NUCT: nuct.md
-    - Content: content.md
+    - 課題：Assignment: assignment.md
+    - お知らせ：Announcement: announcement.md
+    - リソース：Content: content.md
+    - 小テスト：Quiz: quiz.md
+    - 参加者：Roster: roster.md
 
 plugins:
 - search
