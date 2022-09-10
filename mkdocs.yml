@@ -26,7 +26,7 @@ repo_name: NUCT_api_wrapper
 
 nav:
   - HOME: index.md
-  - DOCS: reference/
+  - DOCS: reference/NUCT/
   - CLI: cli.md
 
 plugins:
