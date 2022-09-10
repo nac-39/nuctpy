@@ -1,0 +1,19 @@
+site_name: "NUCT_API_WRAPPER"
+theme:
+  name: "material"
+
+nav:
+  - HOME: index.md
+  - DOCS: 
+    - NUCT: nuct.md
+    - Content: content.md
+
+plugins:
+- search
+- mkdocstrings:
+    custom_templates: templates
+    default_handler: python
+    handlers:
+      python:
+        options:
+          show_source: false
