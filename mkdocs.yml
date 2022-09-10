@@ -1,0 +1,48 @@
+site_name: "NUCT_API_WRAPPER"
+theme:
+  name: "material"
+  language: ja
+  features:
+    - navigation.instant
+  icon:
+    repo: fontawesome/brands/git-alt
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+repo_url: https://github.com/nac-39/NUCT_api_wrapper
+repo_name: NUCT_api_wrapper
+
+nav:
+  - HOME: index.md
+  - DOCS: reference/
+  - CLI: cli.md
+
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - literate-nav:
+      nav-file: SUMMARY.md
+  - section-index
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_source: false
+
+markdown_extensions:
+    - mkdocs_click
