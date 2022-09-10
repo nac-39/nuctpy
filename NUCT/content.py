@@ -1,6 +1,10 @@
-from urllib.parse import unquote, urlparse
-from .nuct import NUCT
 import os
+from typing import List
+from urllib.parse import unquote, urlparse
+
+from .nuct import NUCT
+
+HOME_DIR = os.path.expanduser("~/Desktop")
 
 
 class Content(NUCT):
@@ -9,15 +13,14 @@ class Content(NUCT):
         self.content_url = self._urls.direct + "/content"
 
     @NUCT.formatter
-    def site(self, siteid, format="json"):
-        """
-        siteidの授業のリソースの詳細情報をとってくる
+    def site(self, siteid, fmt="json"):
+        """Siteidの授業のリソースの詳細情報をとってくる.
 
         Args:
             siteid: string  nuctのsiteid. 2022_1002140みたいな形式.
-            format: string  json or xml
+            fmt: string  json or xml
 
-        Returns: 
+        Returns:
             format=jsonのとき
             - dictに変換して返す.
             format=xmlのとき
@@ -31,11 +34,9 @@ class Content(NUCT):
         return res
 
     def load_contents_url(self, siteid):
-        """
-        siteidの授業のリソースのURLのリストを返す.
-        Content.site()のラッパー関数．
+        """siteidの授業のリソースのURLのリストを返す. Content.site()のラッパー関数．
 
-        Args: 
+        Args:
             siteid: string  nuctのsiteid. 2022_1002140みたいな形式.
 
         Returns:
@@ -48,11 +49,9 @@ class Content(NUCT):
                 url_list.append(d["url"])
         return url_list
 
-    def load_contents(self, url_list: list[str], save_path=os.path.expanduser("~/Desktop")):
-        """
-        NUCTの認証が必要なURLからファイルをダウンロードするための関数.
-        Content()の初期化が必要．
-        一応, NUCT以外のドメインにはアクセスできないようにしておく.(セッション情報を送ってしまうと怖いため)
+    def load_contents(self, url_list: List[str], save_path=HOME_DIR):
+        """NUCTの認証が必要なURLからファイルをダウンロードするための関数. Content()の初期化が必要． 一応,
+        NUCT以外のドメインにはアクセスできないようにしておく.(セッション情報を送ってしまうと怖いため)
 
         Args:
             url_list: str   nuctのリソースのURLを想定.

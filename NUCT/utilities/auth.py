@@ -1,9 +1,13 @@
-import requests
-from html.parser import HTMLParser
 import time
+from html.parser import HTMLParser
+from typing import List, Optional, Tuple
+
+import requests
+
+from ..settings import MFA_CAS_URL
 from .totp import get_totp_token
 
-url = "https://auth-mfa.nagoya-u.ac.jp/cas/login?service=https%3A%2F%2Fct.nagoya-u.ac.jp%2Fsakai-login-tool%2Fcontainer"
+url = MFA_CAS_URL
 
 
 class GetInputParser(HTMLParser):
@@ -11,7 +15,7 @@ class GetInputParser(HTMLParser):
         super().__init__()
         self.params = {}
 
-    def handle_starttag(self, tag: str, attrs: list[tuple]) -> None:
+    def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> None:
         if tag == "input":
             tmp = {}
             for attr in attrs:
@@ -20,7 +24,7 @@ class GetInputParser(HTMLParser):
                 elif attr[0] == "value":
                     tmp["value"] = attr[1]
             else:
-                if not "value" in tmp.keys():
+                if "value" not in tmp.keys():
                     tmp["value"] = ""
 
             self.params.update({tmp["name"]: tmp["value"]})
@@ -34,7 +38,17 @@ def get_payload(html):
     return payload
 
 
-def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session:
+def login_with_mfa(username: str, password: str, seed: str):
+    """NUCTの多要素認証を突破し、認証済みCookieを持ったセッションオブジェクトを返す.
+
+    Args:
+        username (str): 認証のユーザー名（名大ID）
+        password (str): 認証のパスワード（名大IDのパスワード）
+        seed (str): 多要素認証のシード値
+
+    Returns:
+        requests.session: 認証済みCookieを持ったセッションオブジェクト
+    """
     # sessionの開始
     session = requests.Session()
 
@@ -43,7 +57,7 @@ def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session
     auth_top_page.raise_for_status()  # 200以外でエラー
     # formのname,valueの組を取得
     payload = get_payload(auth_top_page.text)
-    payload.update({"username": USER_NAME, "password": PASSWORD})
+    payload.update({"username": username, "password": password})
     print("top page: ", auth_top_page.status_code)
 
     time.sleep(0.3)
@@ -52,7 +66,7 @@ def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session
     auth_token_page = session.post(url, data=payload)
     auth_token_page.raise_for_status()  # 200以外でエラー
     payload = get_payload(auth_token_page.text)
-    payload.update({"token": get_totp_token(SEED)})
+    payload.update({"token": get_totp_token(seed)})
     print("id & password auth: ", auth_token_page.status_code)
 
     time.sleep(0.3)
@@ -62,5 +76,3 @@ def login_with_mfa(USER_NAME: str, PASSWORD: str, SEED: str) -> requests.session
     nuct_top_page.raise_for_status()  # 200以外でエラー
     print("token auth: ", nuct_top_page.status_code)
     return session
-    
-
