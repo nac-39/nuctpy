@@ -28,6 +28,8 @@ nav:
   - HOME: index.md
   - DOCS: reference/NUCT/
   - CLI: cli.md
+  - EXAMPLES: 
+      - get-resource: examples/get-resources.md
 
 plugins:
   - search
@@ -46,3 +48,6 @@ plugins:
 
 markdown_extensions:
     - mkdocs_click
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences
