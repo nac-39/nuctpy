@@ -29,7 +29,7 @@ class Content(NUCT):
         Errors:
             KeyError: formatがjsonかxmlでない時に送出する.
         """
-        url = self.content_url + f"/site/{siteid}.{format}"
+        url = self.content_url + f"/site/{siteid}.{fmt}"
         res = self.session.get(url)
         return res
 
