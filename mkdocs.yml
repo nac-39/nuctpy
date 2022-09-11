@@ -29,7 +29,8 @@ nav:
   - DOCS: reference/NUCT/
   - CLI: cli.md
   - EXAMPLES: 
-      - get-resource: examples/get-resources.md
+      - リソース: examples/get-resources.md
+      - 課題: examples/get-assignment.md
 
 plugins:
   - search
