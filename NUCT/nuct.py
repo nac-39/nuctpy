@@ -3,6 +3,8 @@ import json
 from collections import namedtuple
 from urllib.parse import urlparse
 
+from NUCT.utilities.auth import get_saved_session, have_session, save_cookies
+
 from . import settings
 from .utilities import login_with_mfa
 
@@ -32,11 +34,16 @@ class NUCT:
             site_id_title: { siteId: 授業名 }の形式の辞書のリスト。
         """
         if session is None:
-            self.session = login_with_mfa(
-                self._vars.username, self._vars.password, self._vars.seed
-            )
+            if have_session():
+                self.session = get_saved_session()
+            else:
+                self.session = login_with_mfa(
+                    self._vars.username, self._vars.password, self._vars.seed
+                )
         else:
             self.session = session
+
+        save_cookies(self.session)
 
         _res = self.session.get(f"{self._urls.direct}/site.json?_limit=1000000")
         self.site_data = json.loads(_res.text)["site_collection"]

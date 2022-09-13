@@ -1,13 +1,16 @@
+import os
+import pickle
 import time
 from html.parser import HTMLParser
 from typing import List, Optional, Tuple
 
 import requests
 
-from ..settings import MFA_CAS_URL
+from ..settings import COOKIE_PATH, MFA_CAS_URL
 from .totp import get_totp_token
 
 url = MFA_CAS_URL
+HOME = os.path.expanduser("~")
 
 
 class GetInputParser(HTMLParser):
@@ -75,4 +78,28 @@ def login_with_mfa(username: str, password: str, seed: str):
     nuct_top_page = session.post(url, data=payload)
     nuct_top_page.raise_for_status()  # 200以外でエラー
     print("token auth: ", nuct_top_page.status_code)
+    return session
+
+
+def save_cookies(session: requests.Session) -> None:
+    with open(COOKIE_PATH + "/cookies.pkl", "wb") as f:
+        pickle.dump(session.cookies, f)
+
+
+def have_session():
+    if not os.path.isfile(COOKIE_PATH + "/cookies.pkl"):
+        return False
+    cookies = pickle.load(open(COOKIE_PATH + "/cookies.pkl", "rb"))
+    for cookie in cookies:
+        if cookie.expires is None:
+            continue
+        if cookie.expires < int(time.time()):
+            return False
+    return True
+
+
+def get_saved_session():
+    session = requests.Session()
+    cookies = pickle.load(open(COOKIE_PATH + "/cookies.pkl", "rb"))
+    session.cookies = cookies
     return session
