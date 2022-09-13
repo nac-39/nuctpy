@@ -3,10 +3,8 @@ import json
 from collections import namedtuple
 from urllib.parse import urlparse
 
-from NUCT.utilities.auth import get_saved_session, have_session, save_cookies
-
 from . import settings
-from .utilities import login_with_mfa
+from .utilities import get_saved_session, have_session, login_with_mfa, save_cookies
 
 Var = namedtuple("Var", ("username", "password", "seed"))
 Urls = namedtuple("Urls", ("portal", "direct", "domain"))
