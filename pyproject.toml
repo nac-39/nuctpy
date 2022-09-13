@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "NUCT"
+name = "NUCT_API_WRAPPER"
 version = "0.1.0"
 description = "API wrapper of NUCT"
 authors = ["nac-39"]
@@ -29,4 +29,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-nuct-cli = "NUCT.cli:nuct"
+nuct-cli = "NUCT/cli"
