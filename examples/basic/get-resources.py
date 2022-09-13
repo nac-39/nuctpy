@@ -2,7 +2,7 @@ import nuct
 
 content = nuct.Content()
 
-SITE_ID = "2022_0034233"
+SITE_ID = "<site_id>"
 resources_list = content.site(SITE_ID)
 
 print(resources_list)

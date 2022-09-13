@@ -2,6 +2,6 @@ import nuct
 
 assignment = nuct.Assignment()
 
-SITE_ID = "2022_1001025"
+SITE_ID = "<site_id>"
 print(assignment.site(SITE_ID))
 print(assignment.my())

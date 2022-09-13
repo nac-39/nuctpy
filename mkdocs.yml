@@ -31,6 +31,9 @@ nav:
   - EXAMPLES: 
       - リソース: examples/get-resources.md
       - 課題: examples/get-assignment.md
+      - 小テスト: examples/get-quiz.md
+      - お知らせ: examples/get-announcement.md
+      - 受講者: examples/get-roster.md
 
 plugins:
   - search

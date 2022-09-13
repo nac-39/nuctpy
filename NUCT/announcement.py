@@ -29,7 +29,7 @@ class Announcement(NUCT):
         Args:
             fmt: "json"|"xml" 出力の形式
         Returns:
-            dict: 一覧を辞書の配列で返す
+            res: 一覧を辞書の配列で返す
         """
         url = self.announcement_url + f"/motd.{fmt}"
         res = self.session.get(url)
@@ -41,7 +41,7 @@ class Announcement(NUCT):
          Args:
             fmt: "json"|"xml" 出力の形式
         Returns:
-            dict: 一覧を辞書の配列で返す
+            res: 一覧を辞書の配列で返す
 
         """
         url = self.announcement_url + f"/user.{fmt}"
