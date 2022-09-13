@@ -20,29 +20,14 @@ class NUCT:
         domain=urlparse(settings.NUCT_ROOT).netloc,
     )
 
-    def __init__(self, session=None):
+    def __init__(self):
         """認証済みセッションオブジェクトと授業の一覧のjsonを持つ.
-
-        Args:
-            session (requests.session, optional):
-            一つのセッションオブジェクトを使い回すときに引数にする. Defaults to None.
 
         Constants:
             site_data: 授業一覧のjson.
             site_id_title: { siteId: 授業名 }の形式の辞書のリスト。
         """
-        if session is None:
-            if have_session():
-                self.session = get_saved_session()
-            else:
-                self.session = login_with_mfa(
-                    self._vars.username, self._vars.password, self._vars.seed
-                )
-        else:
-            self.session = session
-
-        save_cookies(self.session)
-
+        self.session = self.create_session()
         _res = self.session.get(f"{self._urls.direct}/site.json?_limit=1000000")
         self.site_data = json.loads(_res.text)["site_collection"]
         self.site_id_title = {}
@@ -51,18 +36,15 @@ class NUCT:
 
     @classmethod
     def create_session(cls):
-        """NUCTにログインした後の状態のsessionオブジェクトを返す。 一つのプログラムの中で、複数のAPIにアクセスしたい時（ex.
-        NUCT.ContentもNUCT.Assignmentも使いたい！というとき）
-        に、毎回セッションを作り直さずに、セッションオブジェクトを使い回すために使います。
-
-        例:
-        ```python
-        nuct_session = NUCT.create_session()
-        content = NUCT.Content(nuct_session)
-        assignment = NUCT.Assignment(nuct_session)
-        ```
-        """
-        return login_with_mfa(cls._vars.username, cls._vars.password, cls._vars.seed)
+        """NUCTにログインした後の状態のsessionオブジェクトを返す。"""
+        if have_session():
+            session = get_saved_session()
+        else:
+            session = login_with_mfa(
+                cls._vars.username, cls._vars.password, cls._vars.seed
+            )
+        save_cookies(session)
+        return session
 
     @staticmethod
     def formatter(func):

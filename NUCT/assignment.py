@@ -7,8 +7,8 @@ from .nuct import NUCT
 
 
 class Assignment(NUCT):
-    def __init__(self, session=None):
-        super().__init__(session)
+    def __init__(self):
+        super().__init__()
         self.assignment_url = self._urls.direct + "/assignment"
 
     @NUCT.formatter

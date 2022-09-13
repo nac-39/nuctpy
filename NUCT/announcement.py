@@ -5,8 +5,8 @@ from .nuct import NUCT
 
 
 class Announcement(NUCT):
-    def __init__(self, session=None):
-        super().__init__(session)
+    def __init__(self):
+        super().__init__()
         self.announcement_url = self._urls.direct + "/announcement"
 
     @NUCT.formatter

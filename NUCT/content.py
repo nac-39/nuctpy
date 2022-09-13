@@ -7,8 +7,8 @@ HOME_DIR = os.path.expanduser("~/Desktop")
 
 
 class Content(NUCT):
-    def __init__(self, session=None):
-        super().__init__(session)
+    def __init__(self):
+        super().__init__()
         self.content_url = self._urls.direct + "/content"
 
     @NUCT.formatter
