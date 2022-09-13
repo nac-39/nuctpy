@@ -26,8 +26,14 @@ repo_name: NUCT_api_wrapper
 
 nav:
   - HOME: index.md
-  - DOCS: reference/
+  - DOCS: reference/NUCT/
   - CLI: cli.md
+  - EXAMPLES: 
+      - リソース: examples/get-resources.md
+      - 課題: examples/get-assignment.md
+      - 小テスト: examples/get-quiz.md
+      - お知らせ: examples/get-announcement.md
+      - 受講者: examples/get-roster.md
 
 plugins:
   - search
@@ -46,3 +52,6 @@ plugins:
 
 markdown_extensions:
     - mkdocs_click
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences
