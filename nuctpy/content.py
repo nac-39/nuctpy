@@ -12,11 +12,11 @@ class Content(NUCT):
         self.content_url = self._urls.direct + "/content"
 
     @NUCT.formatter
-    def site(self, siteid: str, fmt="json"):
+    def site(self, siteid, fmt="json"):
         """Siteidの授業のリソースの詳細情報をとってくる.
 
         Args:
-            siteid: nuctのsiteid. 2022_1002140みたいな形式.
+            siteid: string  nuctのsiteid. 2022_1002140みたいな形式.
             fmt: string  json or xml
 
         Returns:
@@ -32,16 +32,16 @@ class Content(NUCT):
         res = self.get(url)
         return res
 
-    def collect_url(self, siteid: str):
+    def load_contents_url(self, siteid):
         """siteidの授業のリソースのURLのリストを返す. Content.site()のラッパー関数．
 
         Args:
-            siteid: nuctのsiteid. 2022_1002140みたいな形式.
+            siteid: string  nuctのsiteid. 2022_1002140みたいな形式.
 
         Returns:
             list    リソースのURLのリスト.
         """
-        content_list = self.site(siteid)
+        content_list = self.site(siteid)["content_collection"]
         url_list = []
         for d in content_list:
             if not d["url"].split("/")[-1] == "":
@@ -53,8 +53,8 @@ class Content(NUCT):
         NUCT以外のドメインにはアクセスできないようにしておく.(セッション情報を送ってしまうと怖いため)
 
         Args:
-            url: nuctのリソースのURLを想定.
-            save_path: デフォルトはデスクトップ．ファイル名は含まない．
+            url_list: str   nuctのリソースのURLを想定.
+            save_path: str  デフォルトはデスクトップ．ファイル名は含まない．
 
         Returns:
             無し．
