@@ -5,7 +5,7 @@
 完全なAPIのラッパーというわけではなく，使えそうなエンドポイントのみに対応します．また，あると便利なショートカット（例：ある授業のリソースを全てダウンロードする）も追加しま
 
 ## ドキュメント
-https://nac-39.github.io/NUCT_api_wrapper/
+https://nac-39.github.io/nuctpy/
 
 # 注意！
 
@@ -14,7 +14,7 @@ https://nac-39.github.io/NUCT_api_wrapper/
 
 # 使い方
 ```bash
-$ git clone git@github.com:nac-39/NUCT_api_wrapper.git
+$ git clone git@github.com:nac-39/nuctpy.git
 $ cd NUCT_api_wrapper
 
 # 仮想環境を有効にする場合
