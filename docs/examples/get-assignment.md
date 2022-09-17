@@ -1,4 +1,4 @@
-# NUCT.Assignment()を使って課題を取得する
+# nuctpy.Assignment()を使って課題を取得する
 
 次のコードの`<site_id>`を自分が受講している講義のサイトIDに置き換えて実行してみてください。
 
@@ -81,7 +81,7 @@ print(assignment.site(SITE_ID))
     ]
     ```
 
-また、`NUCT.Assignment().my()`を用いて、提出前の課題の一覧（？）を取得することができます。
+また、`nuctpy.Assignment().my()`を用いて、提出前の課題の一覧（？）を取得することができます。
 
 ```python
 import nuct

@@ -1,3 +1,3 @@
-# NUCT-API-WRAPPER
+# nuctpy
 
 [NUCT](https://ct.nagoya-u.ac.jp)のAPIのPythonラッパーです。
