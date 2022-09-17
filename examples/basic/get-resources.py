@@ -1,6 +1,6 @@
-import nuct
+import nuctpy
 
-content = nuct.Content()
+content = nuctpy.Content()
 
 SITE_ID = "<site_id>"
 resources_list = content.site(SITE_ID)

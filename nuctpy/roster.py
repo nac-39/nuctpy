@@ -1,6 +1,3 @@
-from dataclasses import dataclass
-from typing import List
-
 from .nuct import NUCT
 
 
@@ -9,23 +6,8 @@ class Roster(NUCT):
         super().__init__()
         self.roster_url = self._urls.direct + "/roster"
 
-    @dataclass
-    class RosterSiteType:
-        """Roster.site()の返り値
-        Args:
-            displayname: 講義の参加者の名前
-            imageUrl: 講義の参加者のアイコン画像？
-            entityReference: '/roster'
-            entityUrl: 'https://ct.nagoya-u.ac.jp/direct/roster'
-        """
-
-        displayname: str
-        image_url: str
-        entity_reference: str
-        entity_url: str
-
     @NUCT.formatter
-    def site(self, siteid: str, fmt="json") -> List[RosterSiteType]:
+    def site(self, siteid: str, fmt="json"):
         """サイトの登録者の一覧を取得します。
         Args:
             siteid: 講義のサイトID。例：2022_(7桁の数字)

@@ -5,7 +5,7 @@ import nuctpy
 
 @click.group()
 def nuct():
-    """root."""
+    """nuctpyのcli."""
     pass
 
 

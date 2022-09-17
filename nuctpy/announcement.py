@@ -10,14 +10,14 @@ class Announcement(NUCT):
         self.announcement_url = self._urls.direct + "/announcement"
 
     @NUCT.formatter
-    def site(self, siteid, fmt: Literal["json", "xml"] = "json"):
+    def site(self, siteid: str, fmt: Literal["json", "xml"] = "json"):
         """ある授業のお知らせを取得する関数です。
         Args:
-            siteid: string 授業のサイトID
+            siteid: 授業のサイトID
             fmt: "json"|"xml" 出力の形式
 
         Returns:
-            dict: 一覧を辞書の配列で返す
+            res: 一覧を辞書の配列で返す
         """
         url = self.announcement_url + f"/site/{siteid}.{fmt}"
         res = self.get(url)
@@ -29,7 +29,7 @@ class Announcement(NUCT):
         Args:
             fmt: "json"|"xml" 出力の形式
         Returns:
-            res: 一覧を辞書の配列で返す
+            res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
         """
         url = self.announcement_url + f"/motd.{fmt}"
         res = self.get(url)
@@ -41,7 +41,7 @@ class Announcement(NUCT):
          Args:
             fmt: "json"|"xml" 出力の形式
         Returns:
-            res: 一覧を辞書の配列で返す
+            res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
 
         """
         url = self.announcement_url + f"/user.{fmt}"
