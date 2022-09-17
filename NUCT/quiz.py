@@ -2,8 +2,8 @@ from .nuct import NUCT
 
 
 class Quiz(NUCT):
-    def __init__(self, session=None):
-        super().__init__(session)
+    def __init__(self):
+        super().__init__()
         self.quiz_url = self._urls.direct + "/sam_pub"
 
     @NUCT.formatter
@@ -15,5 +15,5 @@ class Quiz(NUCT):
             講義の小テストの情報
         """
         url = self.quiz_url + f"/context/{siteid}.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res

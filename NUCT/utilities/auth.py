@@ -1,13 +1,17 @@
+import os
+import pickle
 import time
 from html.parser import HTMLParser
 from typing import List, Optional, Tuple
 
 import requests
+from cachecontrol import CacheControl
+from cachecontrol.caches import FileCache
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
-from ..settings import MFA_CAS_URL
+from ..settings import MFA_CAS_URL, SETTING_PATH
 from .totp import get_totp_token
-
-url = MFA_CAS_URL
 
 
 class GetInputParser(HTMLParser):
@@ -51,9 +55,17 @@ def login_with_mfa(username: str, password: str, seed: str):
     """
     # sessionの開始
     session = requests.Session()
+    retries = Retry(
+        total=5,
+        backoff_factor=1,
+        allowed_methods=["POST"],
+        status_forcelist=[401, 500, 502, 503, 504],
+    )
+    session.mount("https://", HTTPAdapter(max_retries=retries))
+    session.mount("http://", HTTPAdapter(max_retries=retries))
 
     # 認証のトップページにアクセス
-    auth_top_page = session.get(url)
+    auth_top_page = session.get(MFA_CAS_URL)
     auth_top_page.raise_for_status()  # 200以外でエラー
     # formのname,valueの組を取得
     payload = get_payload(auth_top_page.text)
@@ -63,7 +75,7 @@ def login_with_mfa(username: str, password: str, seed: str):
     time.sleep(0.3)
 
     # username,passwordをpostする．多要素認証画面が返ってくる．
-    auth_token_page = session.post(url, data=payload)
+    auth_token_page = session.post(MFA_CAS_URL, data=payload)
     auth_token_page.raise_for_status()  # 200以外でエラー
     payload = get_payload(auth_token_page.text)
     payload.update({"token": get_totp_token(seed)})
@@ -72,7 +84,36 @@ def login_with_mfa(username: str, password: str, seed: str):
     time.sleep(0.3)
 
     # tokenを含めてpostする．nuctのトップ画面が返ってくる．
-    nuct_top_page = session.post(url, data=payload)
+    nuct_top_page = session.post(MFA_CAS_URL, data=payload, timeout=(5.0, 5.0))
     nuct_top_page.raise_for_status()  # 200以外でエラー
     print("token auth: ", nuct_top_page.status_code)
     return session
+
+
+def save_cookies(session: requests.Session) -> None:
+    with open(SETTING_PATH + "/cookies.pkl", "wb") as f:
+        pickle.dump(session.cookies, f)
+
+
+def have_session():
+    if not os.path.isfile(SETTING_PATH + "/cookies.pkl"):
+        return False
+    cookies = pickle.load(open(SETTING_PATH + "/cookies.pkl", "rb"))
+    for cookie in cookies:
+        if cookie.expires is None:
+            continue
+        if cookie.expires < int(time.time()):
+            return False
+    return True
+
+
+def get_saved_session():
+    session = requests.Session()
+    cookies = pickle.load(open(SETTING_PATH + "/cookies.pkl", "rb"))
+    session.cookies = cookies
+    return session
+
+
+def make_cached_session(session: requests.Session):
+    cache_path = os.path.join(SETTING_PATH, ".cache")
+    return CacheControl(session, cache=FileCache(cache_path))

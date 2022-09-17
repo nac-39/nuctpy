@@ -5,8 +5,8 @@ from .nuct import NUCT
 
 
 class Roster(NUCT):
-    def __init__(self, session=None):
-        super().__init__(session)
+    def __init__(self):
+        super().__init__()
         self.roster_url = self._urls.direct + "/roster"
 
     @dataclass
@@ -34,5 +34,5 @@ class Roster(NUCT):
             res: 登録者一覧の情報
         """
         url = self.roster_url + f"/site/{siteid}.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res
