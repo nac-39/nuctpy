@@ -29,7 +29,7 @@ class Content(NUCT):
             KeyError: formatがjsonかxmlでない時に送出する.
         """
         url = self.content_url + f"/site/{siteid}.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res
 
     def collect_url(self, siteid: str):
@@ -62,7 +62,7 @@ class Content(NUCT):
         if urlparse(url).netloc != self._urls.domain:
             print(f"{urlparse(url).netloc}は許可されていません．")
         else:
-            res = self.session.get(url, stream=True)
+            res = self.get(url, stream=True)
             # urlエンコーディングをデコードする
             filename = unquote(os.path.basename(url))
             if filename == "":

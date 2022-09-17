@@ -13,4 +13,7 @@ NUCT_ROOT = "https://ct.nagoya-u.ac.jp/"
 MEIDAI_ID = os.environ.get("MEIDAI_ID")
 MEIDAI_PWD = os.environ.get("MEIDAI_PWD")
 SEED = os.environ.get("SEED")
-COOKIE_PATH = os.path.expanduser("~/.nuct-cli")
+SETTING_PATH = os.path.expanduser("~/.config/.nuct-cli")
+
+if not os.path.exists(SETTING_PATH):
+    os.mkdir(SETTING_PATH)

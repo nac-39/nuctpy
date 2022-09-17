@@ -25,6 +25,22 @@ pycodestyle = ">=2.9.1"
 toml = "*"
 
 [[package]]
+name = "cachecontrol"
+version = "0.12.12"
+description = "httplib2 caching for requests"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+msgpack = ">=0.5.2"
+requests = "*"
+
+[package.extras]
+filecache = ["filelock (>=3.8.0)"]
+redis = ["redis (>=2.10.5)"]
+
+[[package]]
 name = "certifi"
 version = "2022.6.15"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -338,6 +354,14 @@ python-versions = ">=3.7"
 [package.dependencies]
 griffe = ">=0.11.1"
 mkdocstrings = ">=0.19"
+
+[[package]]
+name = "msgpack"
+version = "1.0.4"
+description = "MessagePack serializer"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "mypy"
@@ -659,11 +683,12 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "b4d4dfc349ab4163f64e82abf2e5f44204ea8fe46aa721312df93fb63b9564e4"
+content-hash = "c20dc1b6b105bf1b7fcd9bf4a01508dc63e3ca8b333341e2895231131d0b045e"
 
 [metadata.files]
 attrs = []
 autopep8 = []
+cachecontrol = []
 certifi = []
 cfgv = []
 charset-normalizer = []
@@ -694,6 +719,7 @@ mkdocs-material-extensions = []
 mkdocs-section-index = []
 mkdocstrings = []
 mkdocstrings-python = []
+msgpack = []
 mypy = []
 mypy-extensions = []
 nodeenv = []

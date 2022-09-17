@@ -15,5 +15,5 @@ class Quiz(NUCT):
             講義の小テストの情報
         """
         url = self.quiz_url + f"/context/{siteid}.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res

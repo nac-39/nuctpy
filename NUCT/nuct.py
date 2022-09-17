@@ -4,7 +4,13 @@ from collections import namedtuple
 from urllib.parse import urlparse
 
 from . import settings
-from .utilities import get_saved_session, have_session, login_with_mfa, save_cookies
+from .utilities import (
+    get_saved_session,
+    have_session,
+    login_with_mfa,
+    make_cached_session,
+    save_cookies,
+)
 
 Var = namedtuple("Var", ("username", "password", "seed"))
 Urls = namedtuple("Urls", ("portal", "direct", "domain"))
@@ -28,7 +34,7 @@ class NUCT:
             site_id_title: { siteId: 授業名 }の形式の辞書のリスト。
         """
         self.session = self.create_session()
-        _res = self.session.get(f"{self._urls.direct}/site.json?_limit=1000000")
+        _res = self.get(f"{self._urls.direct}/site.json?_limit=1000000")
         self.site_data = json.loads(_res.text)["site_collection"]
         self.site_id_title = {}
         for d in self.site_data:
@@ -40,11 +46,19 @@ class NUCT:
         if have_session():
             session = get_saved_session()
         else:
+            session = cls.get_new_session()
+        save_cookies(session)
+        return session
+
+    @classmethod
+    def get_new_session(cls, cached=True):
+        if cached:  # default
             session = login_with_mfa(
                 cls._vars.username, cls._vars.password, cls._vars.seed
             )
-        save_cookies(session)
-        return session
+            return make_cached_session(session)
+
+        return login_with_mfa(cls._vars.username, cls._vars.password, cls._vars.seed)
 
     @staticmethod
     def formatter(func):
@@ -78,19 +92,21 @@ class NUCT:
 
         return wrapper
 
-    def get(self, url):
+    def get(self, url, *args, **kwargs):
         """多要素認証にログイン済みの状態でURLにgetリクエストを送る.
 
         Args:
-            url (url): https://ct.nagoya-u.ac.jpから始まるURLのみ許可されています。
+            url (url): https://*.nagoya-u.ac.jpのURLのみ許可されています。
 
         Returns:
             Request: Requestオブジェクト。
         """
         parsed = urlparse(url)
-        print(parsed.scheme)
-        assert parsed.scheme != ("http" or "https")
-        if parsed.netloc != self._urls.domain:
-            print(f"{urlparse(url).netloc}は許可されていません．")
-        res = self.session.get(url)
+        if parsed.netloc.split(".")[-3:] != self._urls.domain.split(".")[-3:]:
+            raise ValueError(f"{urlparse(url).netloc}は許可されていません．")
+        res = self.session.get(url, *args, **kwargs)
+        if res.status_code == 401:
+            self.session = self.get_new_session()
+            self.get(url)
+        res.raise_for_status()
         return res
