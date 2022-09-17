@@ -7,7 +7,7 @@ import mkdocs_gen_files
 nav = mkdocs_gen_files.Nav()
 
 ignore_files = ["__main__", "totp", "settings", "cli"]
-for path in sorted(Path("NUCT").rglob("*.py")):
+for path in sorted(Path("nuctpy").rglob("*.py")):
     module_path = path.with_suffix("")
     doc_path = path.with_suffix(".md")
     full_doc_path = Path("reference", doc_path)
