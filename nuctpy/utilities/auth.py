@@ -42,16 +42,16 @@ def get_payload(html):
     return payload
 
 
-def login_with_mfa(username: str, password: str, seed: str):
+def login_with_mfa(username: str, password: str, seed: str) -> requests.Session:
     """NUCTの多要素認証を突破し、認証済みCookieを持ったセッションオブジェクトを返す.
 
     Args:
-        username (str): 認証のユーザー名（名大ID）
-        password (str): 認証のパスワード（名大IDのパスワード）
-        seed (str): 多要素認証のシード値
+        username: 認証のユーザー名（名大ID）
+        password: 認証のパスワード（名大IDのパスワード）
+        seed: 多要素認証のシード値
 
     Returns:
-        requests.session: 認証済みCookieを持ったセッションオブジェクト
+        requests.Session: 認証済みCookieを持ったセッションオブジェクト
     """
     # sessionの開始
     session = requests.Session()

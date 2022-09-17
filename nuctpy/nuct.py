@@ -3,6 +3,8 @@ import json
 from collections import namedtuple
 from urllib.parse import urlparse
 
+import requests
+
 from . import settings
 from .utilities import (
     get_saved_session,
@@ -41,8 +43,12 @@ class NUCT:
             self.site_id_title.update({d["entityId"]: d["entityTitle"]})
 
     @classmethod
-    def create_session(cls):
-        """NUCTにログインした後の状態のsessionオブジェクトを返す。"""
+    def create_session(cls) -> requests.Session:
+        """キャッシュがあれば用いてセッションをつくる.
+
+        Returns:
+            requests.Session: ログイン済みのセッション
+        """
         if have_session():
             session = get_saved_session()
         else:
@@ -51,7 +57,15 @@ class NUCT:
         return session
 
     @classmethod
-    def get_new_session(cls, cached=True):
+    def get_new_session(cls, cached=True) -> requests.Session:
+        """新しくログイン済みのセッションを作る.
+
+        Args:
+            cached (bool, optional): キャッシュを利用する. Defaults to True.
+
+        Returns:
+            requests.Session: ログイン済みのセッションオブジェクト
+        """
         if cached:  # default
             session = login_with_mfa(
                 cls._vars.username, cls._vars.password, cls._vars.seed
@@ -92,14 +106,14 @@ class NUCT:
 
         return wrapper
 
-    def get(self, url, *args, **kwargs):
-        """多要素認証にログイン済みの状態でURLにgetリクエストを送る.
+    def get(self, url, *args, **kwargs) -> requests.Response:
+        """多要素認証にログイン済みの状態でURLにgetリクエストを送る. また、もしセッションが切れていたらセッションを作り直す。
 
         Args:
             url (url): https://*.nagoya-u.ac.jpのURLのみ許可されています。
 
         Returns:
-            Request: Requestオブジェクト。
+            Request: レスポンス
         """
         parsed = urlparse(url)
         if parsed.netloc.split(".")[-3:] != self._urls.domain.split(".")[-3:]:

@@ -1,6 +1,6 @@
-import nuct
+import nuctpy
 
-announcement = nuct.Announcement()
+announcement = nuctpy.Announcement()
 
 SITE_ID = "<site_id>"
 print(announcement.site(SITE_ID))

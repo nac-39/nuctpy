@@ -1,6 +1,6 @@
-import nuct
+import nuctpy
 
-assignment = nuct.Assignment()
+assignment = nuctpy.Assignment()
 
 SITE_ID = "<site_id>"
 print(assignment.site(SITE_ID))
