@@ -16,4 +16,4 @@ SEED = os.environ.get("SEED")
 SETTING_PATH = os.path.expanduser("~/.config/.nuct-cli")
 
 if not os.path.exists(SETTING_PATH):
-    os.mkdir(SETTING_PATH)
+    os.makedirs(SETTING_PATH, exist_ok=True)
