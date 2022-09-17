@@ -1,4 +1,4 @@
-# [WIP]NUCT_api_wrapper
+# [WIP]nuctpy
 
 名古屋大学のLMSであるNUCTのAPIのラッパーです．
 
