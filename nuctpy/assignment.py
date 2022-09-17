@@ -12,12 +12,12 @@ class Assignment(NUCT):
         self.assignment_url = self._urls.direct + "/assignment"
 
     @NUCT.formatter
-    def site(self, siteid, fmt="json"):
+    def site(self, siteid: str, fmt="json"):
         """ある授業のsiteidを指定して，その授業の課題一覧を取得する．
 
         Args:
             siteid:  授業のid. 2022_1002140みたいな形式．
-            fmt: jsonかxml．デフォルトはjson．
+            fmt:  "json"|"xml" 出力の形式
 
         Returns:
             res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
@@ -31,7 +31,7 @@ class Assignment(NUCT):
         """全ての課題一覧を取得する．
 
         Args:
-            fmt: jsonかxml．デフォルトはjson．
+            fmt:  "json"|"xml" 出力の形式
 
         Returns:
             res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．

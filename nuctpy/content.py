@@ -12,18 +12,15 @@ class Content(NUCT):
         self.content_url = self._urls.direct + "/content"
 
     @NUCT.formatter
-    def site(self, siteid, fmt="json"):
+    def site(self, siteid: str, fmt="json"):
         """Siteidの授業のリソースの詳細情報をとってくる.
 
         Args:
-            siteid: string  nuctのsiteid. 2022_1002140みたいな形式.
-            fmt: string  json or xml
+            siteid: nuctのsiteid. 2022_1002140みたいな形式.
+            fmt:  "json"|"xml" 出力の形式
 
         Returns:
-            format=jsonのとき
-            - dictに変換して返す.
-            format=xmlのとき
-            - xmlのまま返す.
+            res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
 
         Errors:
             KeyError: formatがjsonかxmlでない時に送出する.
@@ -32,14 +29,14 @@ class Content(NUCT):
         res = self.get(url)
         return res
 
-    def collect_url(self, siteid):
+    def collect_url(self, siteid: str) -> list:
         """siteidの授業のリソースのURLのリストを返す. Content.site()のラッパー関数．
 
         Args:
             siteid: string  nuctのsiteid. 2022_1002140みたいな形式.
 
         Returns:
-            list    リソースのURLのリスト.
+            url_list: リソースのurlのリスト
         """
         content_list = self.site(siteid)["content_collection"]
         url_list = []
