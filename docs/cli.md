@@ -1,4 +1,4 @@
 ::: mkdocs-click
-    :module: NUCT.cli
+    :module: nuctpy.cli
     :command: nuct
     :depth: 1
