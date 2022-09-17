@@ -32,7 +32,7 @@ class Content(NUCT):
         res = self.get(url)
         return res
 
-    def load_contents_url(self, siteid):
+    def collect_url(self, siteid):
         """siteidの授業のリソースのURLのリストを返す. Content.site()のラッパー関数．
 
         Args:

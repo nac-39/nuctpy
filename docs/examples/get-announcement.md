@@ -9,14 +9,14 @@
     ```
 
 ```python
-import nuct
+import nuctpy
 
-announcement = nuct.Announcement()
+announcement = nuctpy.Announcement()
 
 SITE_ID = "<site_id>"
-print(announcement.site(SITE_ID)) #講義のサイトごと
-print(announcement.user()) # ユーザーのお知らせ全て？
-print(announcement.motd()) # 今日のお知らせ全て？
+print(announcement.site(SITE_ID))
+print(announcement.user())
+print(announcement.motd())
 ```
 
 出力の例は次のようになります。

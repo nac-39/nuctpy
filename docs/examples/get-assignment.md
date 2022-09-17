@@ -9,12 +9,13 @@
     ```
 
 ```python
-import nuct
+import nuctpy
 
-assignment = nuct.Assignment()
+assignment = nuctpy.Assignment()
 
 SITE_ID = "<site_id>"
 print(assignment.site(SITE_ID))
+print(assignment.my())
 ```
 
 ??? info "出力の例"
@@ -84,9 +85,9 @@ print(assignment.site(SITE_ID))
 また、`nuctpy.Assignment().my()`を用いて、提出前の課題の一覧（？）を取得することができます。
 
 ```python
-import nuct
+import nuctpy
 
-assignment = nuct.Assignment()
+assignment = nuctpy.Assignment()
 
 print(assignment.my())
 ```
