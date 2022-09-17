@@ -1,6 +1,6 @@
 import click
 
-import NUCT
+import nuctpy
 
 
 @click.group()
@@ -15,7 +15,7 @@ def nuct():
 @nuct.command()
 def site(detail, site_id, year):
     """授業の一覧を表示."""
-    nuct = NUCT.NUCT()
+    nuct = nuctpy.NUCT()
     _data = nuct.site_data  # 授業一覧のjsonを読み込む
     for d in _data:
         if year:
@@ -45,7 +45,7 @@ def site(detail, site_id, year):
 @nuct.command()
 def content(siteid, link, download, grep, out):
     """ある授業のリソースの一覧を表示."""
-    c = NUCT.Content()
+    c = nuctpy.Content()
     data = c.site(siteid)
     dir_t = "├──"
     dir_stick = "│  "
@@ -111,7 +111,7 @@ def content(siteid, link, download, grep, out):
 @nuct.command()
 def assignment():
     """課題の一覧を表示."""
-    a = NUCT.Assignment()
+    a = nuctpy.Assignment()
     data = a.my()
     for d in data:
         click.echo(a.site_id_title[d["context"]] + "\t" + d["entityTitle"])

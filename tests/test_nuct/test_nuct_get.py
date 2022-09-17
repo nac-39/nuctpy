@@ -1,6 +1,6 @@
 import pytest
 
-from NUCT import NUCT
+from nuctpy import NUCT
 
 ct = NUCT()
 

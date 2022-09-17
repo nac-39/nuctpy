@@ -1,4 +1,4 @@
-from NUCT import Quiz
+from nuctpy import Quiz
 
 
 def test_quiz_context():

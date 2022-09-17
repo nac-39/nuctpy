@@ -1,4 +1,4 @@
-from NUCT import Assignment
+from nuctpy import Assignment
 
 
 def test_assignment_site():
