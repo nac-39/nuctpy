@@ -29,7 +29,7 @@ SEED=
 EOF
 
 # 必要なパッケージをインストール
-$ pip install -r ./NUCT/requirements.txt
+$ pip install -r ./nuctpy/requirements.txt
 
 # NUCTパッケージをインストールする
 $ pip install -e .

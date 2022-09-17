@@ -18,5 +18,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CONFIG_FILE: mkdocs.yml
           EXTRA_PACKAGES: build-base
-          REQUIREMENTS: NUCT/requirements.txt
+          REQUIREMENTS: nuctpy/requirements.txt
           PYTHONPATH: /github/workspace

@@ -5,8 +5,8 @@ from .nuct import NUCT
 
 
 class Announcement(NUCT):
-    def __init__(self, session=None):
-        super().__init__(session)
+    def __init__(self):
+        super().__init__()
         self.announcement_url = self._urls.direct + "/announcement"
 
     @NUCT.formatter
@@ -20,7 +20,7 @@ class Announcement(NUCT):
             dict: 一覧を辞書の配列で返す
         """
         url = self.announcement_url + f"/site/{siteid}.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res
 
     @NUCT.formatter
@@ -29,10 +29,10 @@ class Announcement(NUCT):
         Args:
             fmt: "json"|"xml" 出力の形式
         Returns:
-            dict: 一覧を辞書の配列で返す
+            res: 一覧を辞書の配列で返す
         """
         url = self.announcement_url + f"/motd.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res
 
     @NUCT.formatter
@@ -41,9 +41,9 @@ class Announcement(NUCT):
          Args:
             fmt: "json"|"xml" 出力の形式
         Returns:
-            dict: 一覧を辞書の配列で返す
+            res: 一覧を辞書の配列で返す
 
         """
         url = self.announcement_url + f"/user.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res

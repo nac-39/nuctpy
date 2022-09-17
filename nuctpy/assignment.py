@@ -7,8 +7,8 @@ from .nuct import NUCT
 
 
 class Assignment(NUCT):
-    def __init__(self, session=None):
-        super().__init__(session)
+    def __init__(self):
+        super().__init__()
         self.assignment_url = self._urls.direct + "/assignment"
 
     @NUCT.formatter
@@ -23,7 +23,7 @@ class Assignment(NUCT):
             res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
         """
         url = self.assignment_url + f"/site/{siteid}.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res
 
     @NUCT.formatter
@@ -37,7 +37,7 @@ class Assignment(NUCT):
             res: NUCT.formatterによってフォーマットされた課題一覧のリストが返る．
         """
         url = self.assignment_url + f"/my.{fmt}"
-        res = self.session.get(url)
+        res = self.get(url)
         return res
 
     @NUCT.formatter
