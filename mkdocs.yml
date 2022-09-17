@@ -21,8 +21,8 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
 
-repo_url: https://github.com/nac-39/NUCT_api_wrapper
-repo_name: NUCT_api_wrapper
+repo_url: https://github.com/nac-39/nuctpy
+repo_name: nuctpy
 
 nav:
   - HOME: index.md
