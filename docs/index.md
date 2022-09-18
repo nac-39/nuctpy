@@ -30,6 +30,6 @@ SEED=your_seed_value
 EOF
 
 # [wip] コマンドラインでnuctpyを使う
-$ nuctpy
-$ nuctpy --help
+$ nuct
+$ nuct --help
 ```
