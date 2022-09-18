@@ -30,6 +30,6 @@ SEED=
 EOF
 
 # [wip] コマンドラインでnuctpyを使う
-$ nuctpy
-$ nuctpy --help
+$ nuct
+$ nuct --help
 ```
