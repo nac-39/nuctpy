@@ -6,19 +6,22 @@ import mkdocs_gen_files
 
 nav = mkdocs_gen_files.Nav()
 
-ignore_files = ["__main__", "totp", "settings", "cli"]
+ignore_files = ["__main__", "totp", "settings"]
+ignore_modules = ["cli"]
 for path in sorted(Path("nuctpy").rglob("*.py")):
     module_path = path.with_suffix("")
     doc_path = path.with_suffix(".md")
     full_doc_path = Path("reference", doc_path)
 
     parts = list(module_path.parts)
-    if parts[-1] == "__init__":
+    if parts[-1] in ignore_files:
+        continue
+    elif len(parts) > 2 and (parts[-2] in ignore_modules):
+        continue
+    elif parts[-1] == "__init__":
         parts = parts[:-1]
         doc_path = doc_path.with_name("index.md")
         full_doc_path = full_doc_path.with_name("index.md")
-    elif parts[-1] in ignore_files:
-        continue
 
     nav[parts] = doc_path.as_posix()
 
