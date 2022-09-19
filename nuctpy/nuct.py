@@ -28,14 +28,16 @@ class NUCT:
         domain=urlparse(settings.NUCT_ROOT).netloc,
     )
 
-    def __init__(self):
+    def __init__(self, use_old_cookie=True):
         """認証済みセッションオブジェクトと授業の一覧のjsonを持つ.
+        Args:
+            use_old_cookie: default=True. Cookieのキャッシュを無効にするオプション。
 
         Constants:
             site_data: 授業一覧のjson.
             site_id_title: { siteId: 授業名 }の形式の辞書のリスト。
         """
-        self.session = self.create_session()
+        self.session = self.create_session(use_old_cookie=use_old_cookie)
         _res = self.get(f"{self._urls.direct}/site.json?_limit=1000000")
         self.site_data = json.loads(_res.text)["site_collection"]
         self.site_id_title = {}
@@ -43,13 +45,13 @@ class NUCT:
             self.site_id_title.update({d["entityId"]: d["entityTitle"]})
 
     @classmethod
-    def create_session(cls) -> requests.Session:
+    def create_session(cls, use_old_cookie=True) -> requests.Session:
         """キャッシュがあれば用いてセッションをつくる.
 
         Returns:
             requests.Session: ログイン済みのセッション
         """
-        if have_session():
+        if have_session() and use_old_cookie:
             session = get_saved_session()
         else:
             session = cls.get_new_session()
