@@ -5,8 +5,8 @@ from urllib.parse import urlparse
 
 import requests
 
-from . import settings
-from .utilities import (
+from .. import settings
+from ..utilities import (
     get_saved_session,
     have_session,
     login_with_mfa,
