@@ -1,6 +1,7 @@
 import click
 
 import nuctpy
+from nuctpy.content import HOME_DIR
 
 from .nuct import nuct
 
@@ -58,8 +59,11 @@ def content(siteid, link, download, grep, out):
             d_is_last = True
 
         # ダウンロードする
-        if download and (contains_any_of_words_in_grep and not is_directory):
-            c.load_contents([d["url"]], save_path=out if out else "")
+        if download and (
+            ((not grep) or (grep and contains_any_of_words_in_grep))
+            and (not is_directory)
+        ):
+            c.load_contents(d["url"], save_path=out if out else HOME_DIR)
             is_downloaded = True
 
         dir_tree = str(dir_stick * dir_count + (dir_end if d_is_last else dir_t))
