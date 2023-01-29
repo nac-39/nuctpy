@@ -2,8 +2,8 @@ from .nuct import NUCT
 
 
 class Quiz(NUCT):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, use_old_cookie=True):
+        super().__init__(use_old_cookie=use_old_cookie)
         self.quiz_url = self._urls.direct + "/sam_pub"
 
     @NUCT.formatter

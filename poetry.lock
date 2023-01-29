@@ -189,6 +189,14 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "lockfile"
+version = "0.12.2"
+description = "Platform-independent file locking module"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "markdown"
 version = "3.4.1"
 description = "Python implementation of Markdown."
@@ -683,8 +691,8 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.9"
-content-hash = "ccce54cdf3a3ff9d9d6dc78904baf33c02d07c2a0f07826646d0fc551442b6f5"
+python-versions = ">=3.9"
+content-hash = "0fb9bc299487d899d0ce72687de5f620cf2ab8a8032c7ae40b805d4a01cdc557"
 
 [metadata.files]
 attrs = []
@@ -704,6 +712,7 @@ idna = []
 importlib-metadata = []
 iniconfig = []
 jinja2 = []
+lockfile = []
 markdown = []
 markupsafe = []
 mergedeep = []
