@@ -53,9 +53,9 @@ class NUCT:
         """
         if have_session() and use_old_cookie:
             session = get_saved_session()
+            save_cookies(session)
         else:
             session = cls.get_new_session()
-        save_cookies(session)
         return session
 
     @classmethod
