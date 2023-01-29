@@ -2,8 +2,8 @@ from .nuct import NUCT
 
 
 class Roster(NUCT):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, use_old_cookie=True):
+        super().__init__(use_old_cookie=use_old_cookie)
         self.roster_url = self._urls.direct + "/roster"
 
     @NUCT.formatter
