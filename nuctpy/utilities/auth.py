@@ -1,16 +1,11 @@
-import os
-import pickle
-import time
 from html.parser import HTMLParser
 from typing import List, Optional, Tuple
 
 import requests
-from cachecontrol import CacheControl
-from cachecontrol.caches import FileCache
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
-from ..settings import MFA_CAS_URL, SETTING_PATH
+from ..settings import MFA_CAS_URL
 from .totp import get_totp_token
 
 
@@ -55,8 +50,11 @@ def login_with_mfa(username: str, password: str, seed: str) -> requests.Session:
     """
     # sessionの開始
     session = requests.Session()
+    session.headers[
+        "User-Agent"
+    ] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"  # noqa: #501
     retries = Retry(
-        total=5,
+        total=2,
         backoff_factor=1,
         allowed_methods=["POST"],
         status_forcelist=[401, 500, 502, 503, 504],
@@ -72,48 +70,23 @@ def login_with_mfa(username: str, password: str, seed: str) -> requests.Session:
     payload.update({"username": username, "password": password})
     print("top page: ", auth_top_page.status_code)
 
-    time.sleep(0.3)
-
     # username,passwordをpostする．多要素認証画面が返ってくる．
     auth_token_page = session.post(MFA_CAS_URL, data=payload)
     auth_token_page.raise_for_status()  # 200以外でエラー
     payload = get_payload(auth_token_page.text)
-    payload.update({"token": get_totp_token(seed)})
     print("id & password auth: ", auth_token_page.status_code)
 
-    time.sleep(0.3)
+    def upload_payload(r: requests.Response, *args, **kwargs):
+        if r.status_code == 401:
+            payload = get_payload(r.text)
+            payload.update({"token": get_totp_token(seed)})
+        return r
+
+    session.hooks["response"].append(upload_payload)
 
     # tokenを含めてpostする．nuctのトップ画面が返ってくる．
+    payload.update({"token": get_totp_token(seed)})
     nuct_top_page = session.post(MFA_CAS_URL, data=payload, timeout=(5.0, 5.0))
     nuct_top_page.raise_for_status()  # 200以外でエラー
     print("token auth: ", nuct_top_page.status_code)
     return session
-
-
-def save_cookies(session: requests.Session) -> None:
-    with open(SETTING_PATH + "/cookies.pkl", "wb") as f:
-        pickle.dump(session.cookies, f)
-
-
-def have_session():
-    if not os.path.isfile(SETTING_PATH + "/cookies.pkl"):
-        return False
-    cookies = pickle.load(open(SETTING_PATH + "/cookies.pkl", "rb"))
-    for cookie in cookies:
-        if cookie.expires is None:
-            continue
-        if cookie.expires < int(time.time()):
-            return False
-    return True
-
-
-def get_saved_session():
-    session = requests.Session()
-    cookies = pickle.load(open(SETTING_PATH + "/cookies.pkl", "rb"))
-    session.cookies = cookies
-    return session
-
-
-def make_cached_session(session: requests.Session):
-    cache_path = os.path.join(SETTING_PATH, ".cache")
-    return CacheControl(session, cache=FileCache(cache_path))

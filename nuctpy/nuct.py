@@ -6,13 +6,7 @@ from urllib.parse import urlparse
 import requests
 
 from . import settings
-from .utilities import (
-    get_saved_session,
-    have_session,
-    login_with_mfa,
-    make_cached_session,
-    save_cookies,
-)
+from .utilities import login_with_mfa
 
 Var = namedtuple("Var", ("username", "password", "seed"))
 Urls = namedtuple("Urls", ("portal", "direct", "domain"))
@@ -28,16 +22,19 @@ class NUCT:
         domain=urlparse(settings.NUCT_ROOT).netloc,
     )
 
-    def __init__(self, use_old_cookie=True):
+    def __init__(self, session: requests.Session = None):
         """認証済みセッションオブジェクトと授業の一覧のjsonを持つ.
         Args:
-            use_old_cookie: default=True. Cookieのキャッシュを無効にするオプション。
+            session: 他のインスタンスとセッションオブジェクトを共有したい場合に用いる。
 
         Constants:
             site_data: 授業一覧のjson.
             site_id_title: { siteId: 授業名 }の形式の辞書のリスト。
         """
-        self.session = self.create_session(use_old_cookie=use_old_cookie)
+        if session:
+            self.session = session
+        else:
+            self.session = self.get_new_session()
         _res = self.get(f"{self._urls.direct}/site.json?_limit=1000000")
         self.site_data = json.loads(_res.text)["site_collection"]
         self.site_id_title = {}
@@ -45,35 +42,11 @@ class NUCT:
             self.site_id_title.update({d["entityId"]: d["entityTitle"]})
 
     @classmethod
-    def create_session(cls, use_old_cookie=True) -> requests.Session:
-        """キャッシュがあれば用いてセッションをつくる.
-
-        Returns:
-            requests.Session: ログイン済みのセッション
-        """
-        if have_session() and use_old_cookie:
-            session = get_saved_session()
-            save_cookies(session)
-        else:
-            session = cls.get_new_session()
-        return session
-
-    @classmethod
-    def get_new_session(cls, cached=True) -> requests.Session:
+    def get_new_session(cls) -> requests.Session:
         """新しくログイン済みのセッションを作る.
 
-        Args:
-            cached (bool, optional): キャッシュを利用する. Defaults to True.
-
-        Returns:
-            requests.Session: ログイン済みのセッションオブジェクト
+        requests.Session: ログイン済みのセッションオブジェクト
         """
-        if cached:  # default
-            session = login_with_mfa(
-                cls._vars.username, cls._vars.password, cls._vars.seed
-            )
-            return make_cached_session(session)
-
         return login_with_mfa(cls._vars.username, cls._vars.password, cls._vars.seed)
 
     @staticmethod
